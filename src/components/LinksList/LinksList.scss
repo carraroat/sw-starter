@@ -1,0 +1,9 @@
+.links span {
+  &:not(:last-of-type)::after {
+    content: ", ";
+  }
+}
+
+a {
+  color: $emerald;
+}

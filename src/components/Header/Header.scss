@@ -1,0 +1,14 @@
+.header-banner {
+  height: 25px;
+  width: 100%;
+  background-color: white;
+  box-shadow: 0 1px 0 0 $grey-teal;
+  text-align: center;
+
+  .header-banner_title {
+    font-size: fontSize(9);
+    font-weight: bold;
+    color: $green-teal;
+    text-decoration: none;
+  }
+}

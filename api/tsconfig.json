@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ES2022",
+
+    "lib": ["esnext"],
+    "types": ["node"],
+
+    "sourceMap": true,
+    "declaration": false,
+    "declarationMap": false,
+
+    "strict": true,
+    "verbatimModuleSyntax": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+
+    "baseUrl": "./src",
+    "paths": {
+      "@types": ["types/index.js"],
+      "@validators": ["validators/index.js"],
+      "@middleware": ["middleware/index.js"],
+      "@services": ["services/index.js"]
+    }
+  }
+}

@@ -1,0 +1,27 @@
+ul.results-list {
+  padding: 0px 2px 0px 0px;
+  margin: 0px;
+  max-height: calc(100vh - 103px);
+  overflow: auto;
+
+  li.results-list_item {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+    padding-block: 8.5px;
+    border-bottom: 0.5px solid $pinkish-grey;
+
+    span {
+      font-size: fontSize(8);
+      font-weight: bold;
+      color: $black;
+    }
+
+    button.button {
+      width: auto;
+      padding-inline: 8.5px;
+    }
+  }
+}

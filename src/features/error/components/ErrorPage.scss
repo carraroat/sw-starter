@@ -1,0 +1,19 @@
+.page#error-page {
+  .container {
+    width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+    margin: auto;
+  }
+
+  span {
+    font-size: fontSize(9);
+  }
+
+  .button {
+    width: fit-content;
+    align-self: center;
+  }
+}

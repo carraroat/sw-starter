@@ -1,0 +1,70 @@
+.radio-group {
+  padding: 0px;
+  margin: 0px;
+  border: none;
+
+  .radio-group_question {
+    display: block;
+    font-size: fontSize(7);
+    font-weight: 600;
+    color: $dark-grey;
+    margin-bottom: 10px;
+  }
+  .radio-group_option {
+    display: flex;
+    float: left;
+
+    &:not(:first-of-type) {
+      margin-left: 15px;
+    }
+
+    .radio-group_option_input {
+      /* Styles for hidding original radio button without */
+      /* losing accessibility. */
+      position: absolute;
+      width: 0px;
+      height: 0px;
+      clip: rect(0, 0, 0, 0);
+
+      &:focus + label::before {
+        outline: 0.5px solid $dark-grey;
+        outline-offset: 1px;
+      }
+
+      & + label::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        display: block;
+        border: solid 0.5px $pinkish-grey;
+        border-radius: 50%;
+        transition: border 0.3s, background-color 0.3s;
+      }
+
+      &:checked + label::before {
+        background-color: $emerald;
+        border-color: $emerald;
+      }
+
+      &:checked + label::after {
+        content: "";
+        width: 2px;
+        height: 2px;
+        position: absolute;
+        background-color: $white;
+        border-radius: 50%;
+        transform: translate(3.4px, 3.4px);
+      }
+    }
+
+    .radio-group_option_label {
+      display: inline-flex;
+      position: relative;
+      font-size: fontSize(7);
+      font-weight: bold;
+      color: $black;
+      cursor: pointer;
+      gap: 5px;
+    }
+  }
+}

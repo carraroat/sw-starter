@@ -1,0 +1,50 @@
+.container#details-container {
+  max-width: 402px;
+  min-height: 208.5px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+
+  .button {
+    margin-top: auto;
+    width: fit-content;
+    padding-inline: 14px;
+  }
+
+  span.legend {
+    font-size: fontSize(7);
+    font-weight: bold;
+    color: $pinkish-grey;
+    margin-top: auto;
+    text-align: center;
+  }
+
+  .details-container-sections {
+    margin-block: 15px;
+    display: flex;
+    gap: 50px;
+    font-size: fontSize(7);
+    flex-wrap: wrap;
+
+    hr {
+      margin-bottom: 2.5px;
+    }
+
+    > div {
+      width: calc(50% - 25px);
+
+      @media screen and (max-width: 320px) {
+        width: 100%;
+      }
+    }
+
+    pre {
+      font-family: "Montserrat";
+      margin: 0px;
+    }
+
+    .details span {
+      display: block;
+    }
+  }
+}
