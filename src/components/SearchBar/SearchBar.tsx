@@ -29,11 +29,7 @@ const SearchBar = () => {
     dispatch(setSearchTerm(event.target.value));
   };
 
-  const onTriggerSearch = () => {
-    if (searchTerm) {
-      dispatch(searchResults());
-    }
-  };
+  const onTriggerSearch = () => dispatch(searchResults());
 
   const onEnterSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {

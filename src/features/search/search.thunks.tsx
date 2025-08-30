@@ -22,9 +22,10 @@ const searchResults = createAsyncThunk<
   },
   {
     condition: (_arg, { getState }) => {
-      const { searchTerm, type, lastFetched } = getState().search;
+      const { searchTerm, type, lastFetched, isSearching } = getState().search;
       return !!(
         searchTerm.trim() &&
+        !isSearching &&
         (lastFetched?.type !== type || lastFetched?.searchTerm !== searchTerm)
       );
     },

@@ -3,56 +3,49 @@ import { httpClient } from "./httpClient.js";
 
 import type { Search, SearchResult } from "@types";
 
-//TODO: Improve
-
-type SearchResults = SearchResult;
-type CacheValue = { data: SearchResults; expiresAt: number };
-
+type CacheValue = { data: SearchResult; expiresAt: number };
 const cache = new Map<string, CacheValue>();
 const TTL_MS = 5 * 60_000;
 
-const fromCache = (url: string) => {
+const getCached = (url: string) => {
   const hit = cache.get(url);
   if (hit && hit.expiresAt > Date.now()) return hit.data;
   if (hit) cache.delete(url);
   return undefined;
 };
 
-const toCache = (url: string, data: any) => {
+const setCached = (url: string, data: SearchResult) => {
   cache.set(url, { data, expiresAt: Date.now() + TTL_MS });
 };
 
-const pLimit = async <T>(n: number, tasks: (() => Promise<T>)[]) => {
-  const results: T[] = new Array(tasks.length);
-  let i = 0;
-  const workers = Array(Math.min(n, tasks.length))
-    .fill(0)
-    .map(async () => {
-      while (i < tasks.length) {
-        const idx = i++;
-        results[idx] = await tasks[idx]();
-      }
-    });
-  await Promise.all(workers);
-  return results;
-};
-
-export const parallelFetch = async (
+// Fetches multiple urls in parallel by memory-caching.
+const parallelFetch = async (
   urls: string[],
   type: Search
 ): Promise<(SearchResult | undefined)[]> => {
   const unique = Array.from(new Set(urls));
-  const tasks = unique.map((url) => async () => {
-    const cached = fromCache(url);
-    if (cached) return { url, data: cached };
+  const resultMap = new Map<string, SearchResult>();
+  const toFetch: string[] = [];
 
-    const res = await httpClient.get(url);
-    const data = formatSearchResult(res?.data, type);
-    toCache(url, data);
-    return { url, data };
-  });
+  for (const url of unique) {
+    const hit = getCached(url);
+    if (hit) resultMap.set(url, hit);
+    else toFetch.push(url);
+  }
 
-  const entries = await pLimit(5, tasks);
-  const map = new Map(entries.map(({ url, data }) => [url, data]));
-  return Array.from(urls.map((u) => map.get(u)));
+  if (toFetch.length) {
+    const fetched = await Promise.all(
+      toFetch.map(async (url) => {
+        const res = await httpClient.get(url);
+        const data = formatSearchResult(res?.data, type) as SearchResult;
+        setCached(url, data);
+        return { url, data };
+      })
+    );
+    for (const { url, data } of fetched) resultMap.set(url, data);
+  }
+
+  return urls.map((u) => resultMap.get(u));
 };
+
+export { parallelFetch };
