@@ -56,8 +56,6 @@ A simple web app to explore the **Star Wars universe**. It lets you search for m
 
 ## 📂 Project Structure
 
----
-
 ```php
 .
 ├── api/                 # Backend service (Express.js + Typescript)
@@ -75,8 +73,6 @@ A simple web app to explore the **Star Wars universe**. It lets you search for m
 ## License
 
 This project is licensed under the MIT License.
-
----
 
 ## 💬 Contact
 
