@@ -5,13 +5,17 @@ services:
       dockerfile: Dockerfile
     env_file:
       - ./api/.env
-    expose:
-      - "3001"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3001/api/health"]
-      interval: 10s
-      timeout: 3s
-      retries: 5
+    environment:
+      PORT: 3001
+      SQLITE_DB: /app/data/app.db
+      REDIS_URL: redis://redis:6379
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      redis:
+        condition: service_started
 
   web:
     build:
@@ -22,3 +26,8 @@ services:
     depends_on:
       api:
         condition: service_healthy
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"

@@ -24,7 +24,9 @@
       "@types": ["types/index.js"],
       "@validators": ["validators/index.js"],
       "@middleware": ["middleware/index.js"],
-      "@services": ["services/index.js"]
+      "@services": ["services/index.js"],
+      "@lib": ["lib/index.js"],
+      "@routes": ["routes/index.js"]
     }
   }
 }

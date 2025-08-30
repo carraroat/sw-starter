@@ -1,12 +1,14 @@
 import { Router, type Request, type Response } from "express";
+import crypto from "crypto";
 
 import { fetchItem, fetchResults } from "@services";
 import { searchSchema, detailSchema } from "@validators";
 import { validateRequest } from "@middleware";
-
-import type { SearchResult } from "@types";
+import { initializeDB } from "@lib";
+import type { SearchResult, StatsRow } from "@types";
 
 export const router = Router();
+const DB = initializeDB();
 
 /**
  * @openapi
@@ -54,9 +56,21 @@ router.get(
     const { searchTerm, type } = req.validated!.query!;
     const queryKey = type === "films" ? "title" : "name";
     const query = `?${queryKey}=${encodeURIComponent(searchTerm)}`;
+    const queryStart = Date.now();
 
     try {
       const results: SearchResult[] = await fetchResults(type, query);
+      const queryDuration = Date.now() - queryStart;
+
+      DB.runQuery(
+        `INSERT OR REPLACE INTO queries(id,term,type,duration_ms,result_count,created_at)
+   VALUES(?,?,?,?,?,datetime('now'))`,
+        crypto.randomUUID(),
+        searchTerm,
+        type,
+        queryDuration,
+        results.length
+      );
 
       res.status(200).json({ ok: true, results });
     } catch (err: any) {
@@ -114,7 +128,6 @@ router.get(
  *             example:
  *               { "code": "NOT_FOUND", "message": "No movie found with id=123." }
  */
-
 router.get(
   "/search/:type/:id",
   validateRequest(detailSchema, "params"),
@@ -136,3 +149,89 @@ router.get(
     }
   }
 );
+
+/**
+ * @openapi
+ * /stats:
+ *   get:
+ *     summary: Get search statistics
+ *     description: Returns statistics about previous search queries, re-computed every 5 minutes.
+ *     tags:
+ *       - Stats
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 ok:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     totalQueries:
+ *                       type: integer
+ *                       description: Total number of queries in the last 7 days
+ *                       example: 42
+ *                     avgRequestTime:
+ *                       type: integer
+ *                       nullable: true
+ *                       description: Average request time in ms
+ *                       example: 123
+ *                     topTerms:
+ *                       type: array
+ *                       description: Top five most frequent search terms
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           term:
+ *                             type: string
+ *                             example: "luke"
+ *                           count:
+ *                             type: integer
+ *                             example: 10
+ *                           percentage:
+ *                             type: integer
+ *                             description: Percentage of total queries
+ *                             example: 24
+ *                     mostPopularHour:
+ *                       type: object
+ *                       nullable: true
+ *                       description: The hour of the day with the highest query volume
+ *                       properties:
+ *                         hour:
+ *                           type: integer
+ *                           example: 14
+ *                         count:
+ *                           type: integer
+ *                           example: 7
+ *                 updated_at:
+ *                   type: string
+ *                   format: date-time
+ *                   example: "2025-08-29T22:08:53Z"
+ */
+router.get("/stats", (req, res) => {
+  const row = DB.getRow<StatsRow>(
+    `SELECT data, updated_at FROM stats WHERE id='latest'`
+  );
+
+  if (!row)
+    return res.json({
+      ok: true,
+      data: {
+        totalQueries: 0,
+        avgRequestTime: null,
+        topTerms: [],
+        mostPopularHour: null,
+      },
+    });
+
+  res.json({
+    ok: true,
+    data: JSON.parse(row.data),
+    updated_at: row.updated_at,
+  });
+});
