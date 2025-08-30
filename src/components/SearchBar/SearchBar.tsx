@@ -38,7 +38,7 @@ const SearchBar = () => {
   };
 
   return (
-    <div id="search-bar" className="container">
+    <div className="container search-bar">
       <RadioGroup
         question="What are you searching for?"
         groupName="searchOptions"

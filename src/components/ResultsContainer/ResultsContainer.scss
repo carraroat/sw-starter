@@ -1,9 +1,6 @@
-.container#results-container {
+.results-container {
   width: 291px;
   min-height: 291px;
-  max-height: 100%;
-  height: auto;
-  overflow: hidden;
 
   .results-container-empty {
     font-size: fontSize(7);

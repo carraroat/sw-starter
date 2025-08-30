@@ -5,3 +5,10 @@ $base-font: 16;
 @function fontSize($px) {
   @return math.div($px, $base-font) * 1rem;
 }
+
+// Media queries
+@mixin screen-sm {
+  @media screen and (max-width: 480px) {
+    @content;
+  }
+}

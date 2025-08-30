@@ -2,7 +2,6 @@ body {
   font-family: "Montserrat", sans-serif;
   margin: 0px;
   background-color: $light-gray;
-  min-width: 320px;
 }
 
 .page {
@@ -37,7 +36,6 @@ body {
   }
 
   .button {
-    width: auto;
     text-transform: uppercase;
     font-size: fontSize(7);
     font-family: "Montserrat";
@@ -59,6 +57,10 @@ body {
     &:not([disabled]) {
       cursor: pointer;
     }
+  }
+
+  @include screen-sm {
+    width: 100%;
   }
 }
 

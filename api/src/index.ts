@@ -19,5 +19,5 @@ app.use("/api/swagger", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 const port = Number(process.env.PORT ?? 3001);
 app.listen(port, () => {
   console.log(`API: http://localhost:${port}`);
-  console.log(`Swagger: at http://localhost:${port}/swagger`);
+  console.log(`Swagger: at http://localhost:${port}/api/swagger`);
 });

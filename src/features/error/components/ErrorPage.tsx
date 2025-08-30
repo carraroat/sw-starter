@@ -6,8 +6,8 @@ const ErrorPage = () => {
   const error = useRouteError();
 
   return (
-    <div id="error-page" className="page">
-      <div className="container">
+    <div className="page error-page">
+      <div className="container error-container">
         {isRouteErrorResponse(error) ? (
           <>
             <h1>

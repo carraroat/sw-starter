@@ -3,5 +3,8 @@
   justify-content: center;
   gap: 15px;
   align-items: flex-start;
-  flex-wrap: wrap;
+
+  @include screen-sm {
+    flex-direction: column;
+  }
 }

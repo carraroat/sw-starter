@@ -19,7 +19,7 @@ type DetailsContainerProps = {
 
 const DetailsContainer = ({ type, id }: DetailsContainerProps) => {
   const dispatch = useAppDispatch();
-  const { details, isSearchingDetails } = useAppSelector(selectSearch);
+  const { details, isSearchingDetails, error } = useAppSelector(selectSearch);
   let Container = null;
 
   useEffect(() => {
@@ -33,9 +33,7 @@ const DetailsContainer = ({ type, id }: DetailsContainerProps) => {
 
   if (isSearchingDetails) {
     Container = <span className="legend">Searching for details...</span>;
-  } else if (!id || details === null) {
-    Container = <span className="legend">{type} not found</span>;
-  } else {
+  } else if (details) {
     if (type === Search.People) {
       const _details = details as PeopleDetails;
       const leftContent = (
@@ -69,10 +67,12 @@ const DetailsContainer = ({ type, id }: DetailsContainerProps) => {
         />
       );
     }
+  } else if (!isSearchingDetails && error) {
+    Container = <span className="legend">{error}</span>;
   }
 
   return (
-    <div id="details-container" className="container">
+    <div className="container details-container">
       {Container}
       <Link className="button" to="/">
         Back to search

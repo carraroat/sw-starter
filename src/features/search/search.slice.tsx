@@ -83,6 +83,8 @@ const searchSlice = createSlice({
       (state, action) => {
         state.isSearching = false;
         state.isSearchingDetails = false;
+        state.results = [];
+        state.details = null;
         state.error = action.error.message ?? "Failed while retrieving data";
       }
     );

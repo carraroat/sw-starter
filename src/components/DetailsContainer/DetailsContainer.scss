@@ -1,4 +1,4 @@
-.container#details-container {
+.details-container {
   max-width: 402px;
   min-height: 208.5px;
   margin: auto;
@@ -9,6 +9,7 @@
     margin-top: auto;
     width: fit-content;
     padding-inline: 14px;
+    align-self: flex-start;
   }
 
   span.legend {
@@ -24,18 +25,18 @@
     display: flex;
     gap: 50px;
     font-size: fontSize(7);
-    flex-wrap: wrap;
 
     hr {
       margin-bottom: 2.5px;
     }
 
     > div {
-      width: calc(50% - 25px);
+      flex: 1;
+    }
 
-      @media screen and (max-width: 320px) {
-        width: 100%;
-      }
+    @include screen-sm {
+      flex-direction: column;
+      gap: 20px;
     }
 
     pre {

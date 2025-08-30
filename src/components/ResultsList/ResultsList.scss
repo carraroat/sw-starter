@@ -1,8 +1,12 @@
 ul.results-list {
   padding: 0px 2px 0px 0px;
   margin: 0px;
-  max-height: calc(100vh - 103px);
+  max-height: 80vh;
   overflow: auto;
+
+  @include screen-sm {
+    max-height: calc(100vh - 236px);
+  }
 
   li.results-list_item {
     list-style-type: none;
