@@ -1,10 +1,5 @@
-import { fileURLToPath } from "url";
-import path from "path";
 import swaggerJSDoc from "swagger-jsdoc";
 import pkg from "../../package.json" with { type: "json" };
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 export const swaggerSpec = swaggerJSDoc({
   definition: {
@@ -16,7 +11,5 @@ export const swaggerSpec = swaggerJSDoc({
     },
     servers: [{ url: "/api" }],
   },
-  apis: [
-    path.join(__dirname, "../routes/*.ts"),
-  ],
+  apis: ["./src/routes/**/*.ts"],
 });

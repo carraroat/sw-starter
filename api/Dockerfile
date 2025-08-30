@@ -24,6 +24,7 @@ RUN npm i -g pm2@latest
 COPY package*.json ./
 RUN npm ci --omit=dev
 COPY --from=build /app/dist ./dist
+COPY --from=build /app/src  ./src 
 COPY ecosystem.config.cjs ./ecosystem.config.cjs
 RUN mkdir -p /app/data
 EXPOSE 3001
