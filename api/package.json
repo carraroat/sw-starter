@@ -1,7 +1,7 @@
 {
   "name": "sw-starter-api",
   "version": "1.0.0",
-  "description": "API for retrieving data for sw-starter app",
+  "description": "API for retrieving movies and characters for sw-starter app from swapi.tech.",
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
