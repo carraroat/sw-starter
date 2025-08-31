@@ -63,8 +63,7 @@ router.get(
       const queryDuration = Date.now() - queryStart;
 
       DB.runQuery(
-        `INSERT OR REPLACE INTO queries(id,term,type,duration_ms,result_count,created_at)
-   VALUES(?,?,?,?,?,datetime('now'))`,
+        `INSERT OR REPLACE INTO queries(id,term,type,duration_ms,result_count) VALUES(?,?,?,?,?)`,
         crypto.randomUUID(),
         searchTerm,
         type,
@@ -232,6 +231,6 @@ router.get("/stats", (req, res) => {
   res.json({
     ok: true,
     data: JSON.parse(row.data),
-    updated_at: row.updated_at,
+    updated_at: new Date(row.updated_at * 1000).toDateString(),
   });
 });

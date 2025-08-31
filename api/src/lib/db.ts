@@ -21,11 +21,18 @@ export const initializeDB = () => {
   const getRows = <T>(query: string): T => db.prepare(query).all() as T;
 
   runQuery(`CREATE TABLE IF NOT EXISTS queries(
-    id TEXT PRIMARY KEY, term TEXT, type TEXT, duration_ms INTEGER, result_count INTEGER, created_at TEXT
+    id TEXT PRIMARY KEY, 
+    term TEXT, 
+    type TEXT, 
+    duration_ms INTEGER, 
+    result_count INTEGER, 
+    created_at INTEGER NOT NULL DEFAULT (strftime('%s','now')) 
   )`);
-  runQuery(
-    `CREATE TABLE IF NOT EXISTS stats(id TEXT PRIMARY KEY, data TEXT, updated_at TEXT)`
-  );
+  runQuery(`CREATE TABLE IF NOT EXISTS stats(
+    id TEXT PRIMARY KEY, 
+    data TEXT, 
+    updated_at INTEGER NOT NULL DEFAULT (strftime('%s','now'))
+  )`);
 
   return {
     runQuery,

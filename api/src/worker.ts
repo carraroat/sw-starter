@@ -21,7 +21,8 @@ const analyzeStats = () => {
   const rows = DB.getRows<
     QueryRow[]
   >(`SELECT term, type, duration_ms, created_at FROM queries
-      WHERE created_at >= datetime('now','-7 days')`);
+      WHERE created_at >= strftime('%s','now','-7 days')
+      ORDER BY created_at DESC`);
 
   const totalQueries = rows.length;
   const avgRequestTime = totalQueries
@@ -37,7 +38,7 @@ const analyzeStats = () => {
     const t = (r.term || "").toLowerCase();
     termCounts[t] = (termCounts[t] || 0) + 1;
 
-    const h = Number(r.created_at.slice(11, 13));
+    const h = new Date(r.created_at * 1000).getHours();
     if (!Number.isNaN(h)) {
       hours[h]++;
     }
@@ -67,7 +68,7 @@ const analyzeStats = () => {
   };
 
   DB.runQuery(
-    `INSERT OR REPLACE INTO stats(id,data,updated_at) VALUES('latest',?,datetime('now'))`,
+    `INSERT OR REPLACE INTO stats(id,data) VALUES('latest',?)`,
     JSON.stringify(snapshot)
   );
 
